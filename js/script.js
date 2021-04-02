@@ -1,11 +1,15 @@
-let money;
-let income;
-let addExpenses;
-let deposit;
-let mission;
-let period;
+let money = 5000;
+let income = 'от бабушки';
+let addExpenses = 'Долг соседу, На обеды в забегаловках, Пивко, На ветер';
+let deposit = true;
+let mission = 750000000;
+let period = 7;
 
-alert('Hi, Sasha. It is my first alert!))Maby');
+console.log(typeof(money), typeof(income), typeof(deposit));
+console.log(addExpenses.length);
+console.log(`Период равен ${period} месяцев`);
+console.log(`Цель заработать ${mission} долларов`);
+console.log(addExpenses.toLocaleLowerCase().split(', '));
 
-console.log('It is my first log!))Maby');
-console.log('There are no errors in the console');
+let budgetDay = money / 30;
+console.log('budgetDay: ', budgetDay);
