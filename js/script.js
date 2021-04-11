@@ -155,6 +155,8 @@ console.log('Сумма всех обязательных расходов за 
 
 //- Вывод возможных расходов в виде массива (addExpenses)
 // console.log('Возможные расходы:', appData.addExpenses);
+console.log('Возможные расходы:' + appData.addExpenses.map((val, i) => val[0].toUpperCase() + val.slice(1)).join(', '));
+
 
 //- Накопления за месяц
 appData.getBudget();
@@ -178,3 +180,4 @@ appData.getInfoDeposit();
 // console.log(appData.percentDeposit);
 // console.log(appData.moneyDeposit);
 // console.log(appData.calcSaveMoney());
+
