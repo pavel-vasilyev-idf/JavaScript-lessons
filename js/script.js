@@ -68,7 +68,7 @@ let itemIncom = '';
             addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'каршеринг, шаурма, на ветер');
         } while (!isString(addExpenses, true));
         
-        appData.addExpenses = addExpenses.toLocaleLowerCase().split(',');
+        appData.addExpenses = addExpenses.toLowerCase().split(',').map(val => val.trim());
 
         
         appData.deposit = confirm('Есть ли у вас депозит в банке?');
