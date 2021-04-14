@@ -79,15 +79,8 @@ const appData = {
     budgetDay: 0,
     budgetMonth : 0,
     expensesMonth: 0,
-    start: function () { // -функция start циклом do while 
-        // do {
-        //     isNumber(money)
-        //     money = +prompt(`Ваш месячный доход? (Рос.руб)`, '40000');
-        // } while (!isNumber(money) || money === '' || money === null);
-        if (salaryAmount.value === '') {
-            alert('Заполните, пожалуйста, поле "Месячный дохо"');
-            return;
-        }
+    start: function () { 
+
         appData.budget = +salaryAmount.value;
         console.log('salaryAmount.value: ', salaryAmount.value);
 
@@ -99,10 +92,6 @@ const appData = {
         appData.getBudget();
 
         appData.showResult();
-
-
-        //- asking
-        // appData.asking();
 
         // - Расходы за месяц вызов getExpensesMonth
         let expensesMonth = appData.getExpensesMonth();
@@ -135,6 +124,7 @@ const appData = {
         })
     },
     getPeriodAmount: function () {  
+
         periodAmount.innerHTML = periodSelect.value;
     },
     getExpenses: function () {
@@ -224,10 +214,16 @@ const appData = {
     calcSaveMoney: function () {
         return appData.budgetMonth * periodSelect.value;
     },
+    disabledStart: () => {
+        start.disabled = !salaryAmount.value.trim();
+    }
+
 }
 
 
 //- Нажатие по кнопке "Рассчитать"
+appData.disabledStart();
+salaryAmount.addEventListener('input', appData.disabledStart);
 start.addEventListener('click', appData.start);
 expensesAdd.addEventListener('click', appData.addExpensesBlock);
 incomeAdd.addEventListener('click', appData.addIncomeBlock);
