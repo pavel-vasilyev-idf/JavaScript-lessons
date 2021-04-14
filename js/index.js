@@ -26,11 +26,12 @@ const salaryAmount = document.querySelector('.salary-amount'); //- Тайтл
 
 //- Блок "Дополнительный доход"
 const incomeTitle = document.querySelector('.income-title'); //- Наименование
-const incomeAmount = document.querySelector('.income-amount'); //- Сумма
+let incomeItems = document.querySelectorAll('.income-items'); //- Блок Наименование + Сумма
+
 
 //- Блок "Обязательные расходы"
 const expensesTitle = document.querySelector('.expenses-title'); //- Наименование
-const expensesItems = document.querySelectorAll('.expenses-items');
+let expensesItems = document.querySelectorAll('.expenses-items'); //- Блок Наименование + Сумма
 
 //- Возможные расходы(через запятую)
 const additionalExpensesTitle = document.querySelector('.additional_expenses-title'); //- Тайтл
@@ -75,6 +76,10 @@ const appData = {
     moneyDeposit: 0,
     mission: 1000000,
     period: 12,
+    budget: 0,
+    budgetDay: 0,
+    budgetMonth : 0,
+    expensesMonth: 0,
     start: function () { // -функция start циклом do while 
         // do {
         //     isNumber(money)
@@ -87,24 +92,42 @@ const appData = {
         appData.budget = salaryAmount.value;
         console.log('salaryAmount.value: ', salaryAmount.value);
 
-
+        appData.getExpenses();
         //- asking
         // appData.asking();
 
         //- Расходы за месяц вызов getExpensesMonth
         // let expensesMonth = appData.getExpensesMonth();
+        appData.getExpensesMonth();
         // console.log('Сумма всех обязательных расходов за месяц: ', expensesMonth, '(рос.руб)');
 
-        // //- Накопления за месяц
-        // appData.getBudget();
-        // // console.log('Накопления за месяц', appData.budgetMonth);
+        //- Накопления за месяц
+        appData.getBudget();
+        // console.log('Накопления за месяц', appData.budgetMonth);
 
         // //- депозит
         // appData.getInfoDeposit();
     },
+    getExpenses: function () {
+        expensesItems.forEach(function (item) {
+            let itemExpenses = item.querySelector('.expenses-title').value;
+            let cacheExpenses = item.querySelector('.expenses-amount').value;
+            if (itemExpenses !== '' && cacheExpenses !== '') {
+                appData.expenses[itemExpenses] = cacheExpenses;
+            }
+        })
+    },
+    addIncomeBlock: function () {
+        let cloneIncomeItem = incomeItems[0].cloneNode(true);
+        incomeItems[0].parentNode.insertBefore(cloneIncomeItem, incomeAdd);
+        incomeItems = document.querySelectorAll('.income-items');
+        if (incomeItems.length === 3) {
+            incomeAdd.style.display = 'none';
+        }
+    }, 
     addExpensesBlock: function () { //- Добавление нового блока по кнопке Плюс
-        let cloneexpensesItem = expensesItems[0].cloneNode(true);
-        expensesItems[0].parentNode.insertBefore(cloneexpensesItem, expensesAdd);
+        let cloneExpensesItem = expensesItems[0].cloneNode(true);
+        expensesItems[0].parentNode.insertBefore(cloneExpensesItem, expensesAdd);
         expensesItems = document.querySelectorAll('.expenses-items');
         if (expensesItems.length === 3) {
             expensesAdd.style.display = 'none';
@@ -154,14 +177,10 @@ const appData = {
             // console.log(appData.expenses);
         }
     },
-    budget: 0,
-    budgetDay: 0,
-    budgetMonth : 0,
-    expensesMonth: 0,
     getExpensesMonth: function () {
         appData.expensesMonth = 0;
         for (let key in appData.expenses) {
-            appData.expensesMonth = appData.expensesMonth + appData.expenses[key];
+            appData.expensesMonth = +appData.expensesMonth + +appData.expenses[key];
         }
         return appData.expensesMonth;
     },
@@ -213,7 +232,8 @@ const appData = {
 
 //- Нажатие по кнопке "Рассчитать"
 start.addEventListener('click', appData.start);
-expensesAdd.addEventListener('click', appData.addExpensesBlock)
+expensesAdd.addEventListener('click', appData.addExpensesBlock);
+incomeAdd.addEventListener('click', appData.addIncomeBlock);
 
 // - Cрок достижения цели в месяцах (результат вызова функции getTargetMonth) 
 // console.log(appData.getTargetMonth());
