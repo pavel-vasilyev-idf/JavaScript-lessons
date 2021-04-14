@@ -53,7 +53,6 @@ console.log('incomeTitle: ', incomeTitle);
 const incomeAmount = document.querySelector('.income-amount'); //- Сумма
 console.log('incomeAmount: ', incomeAmount);
 
-
 //- Блок "Обязательные расходы"
 const expensesTitle = document.querySelector('.expenses-title'); //- Тайтл
 console.log('expensesTitle: ', expensesTitle);
