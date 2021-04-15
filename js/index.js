@@ -111,6 +111,9 @@ const appData = {
         additionalIncomeValue.value = appData.addIncome.join(', ');
         targetMonthValue.value = appData.getTargetMonth();
         incomePeriodValue.value = appData.calcSaveMoney();
+        periodSelect.addEventListener('input', () => {
+                incomePeriodValue.value = appData.calcSaveMoney();
+            });
     },
     getIncome: function () {
         appData.incomeMonth = 0;
@@ -124,7 +127,6 @@ const appData = {
         })
     },
     getPeriodAmount: function () {  
-
         periodAmount.innerHTML = periodSelect.value;
     },
     getExpenses: function () {
