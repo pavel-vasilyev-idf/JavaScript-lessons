@@ -1,11 +1,12 @@
 'use strict'
 
-function DomElement( selector, height, width, bg, fontSize, text ) {
+function DomElement( selector, height, width, bg, fontSize, position, text ) {
     this.selector = selector,
     this.height = height,
     this.width = width,
     this.bg = bg,
     this.fontSize = fontSize,
+    this.position = position,
     this.text = text
 
 }
@@ -31,6 +32,7 @@ DomElement.prototype.createNewEl = function () {
         width: ${this.width}px;
         background: ${this.bg};
         font-size: ${this.fontSize}px;
+        position: ${this.fontSize};
     `
 
     newElem.innerText = `${this.text}`
@@ -40,10 +42,17 @@ function answer() {
     prompt('Введите текст', 'Здрасьте!')
 }
 
-let newElDiv = new DomElement('.block', 100, 100, 'red', 20, prompt('Введите любой текст', ''));
-let newElParagraph = new DomElement('#best', 100, 300, 'yellow', 40, prompt('Введите любой текст', ''));
+let newElDiv = new DomElement('.block', 100, 100, 'red', 20, 'static', prompt('Введите любой текст', ''));
+let newElParagraph = new DomElement('#best', 100, 300, 'yellow','static', 40, prompt('Введите любой текст', ''));
 console.log('newElDiv: ', newElDiv);
 console.log('newElParagraph: ', newElParagraph);
 
 newElDiv.createNewEl();
 newElParagraph.createNewEl();
+
+document.addEventListener('DOMContentLoaded', function () {
+    let threeElement = new DomElement('.block', 100, 100, 'red', 20, 'absolute', prompt('Введите любой текст', ''));
+    threeElement.createNewEl();
+
+})
+
