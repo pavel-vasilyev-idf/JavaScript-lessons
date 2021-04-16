@@ -1,58 +1,73 @@
 'use strict'
 
-function DomElement( selector, height, width, bg, fontSize, position, text ) {
-    this.selector = selector,
-    this.height = height,
-    this.width = width,
-    this.bg = bg,
-    this.fontSize = fontSize,
-    this.position = position,
-    this.text = text
+document.addEventListener('DOMContentLoaded', function () {
+    function DomElement( selector, height, width, bg, fontSize, position, text ) {
+        this.selector = selector,
+        this.height = height,
+        this.width = width,
+        this.bg = bg,
+        this.fontSize = fontSize,
+        this.position = position,
+        this.text = text
 
-}
-
-let body = document.querySelector('body')
-
-
-DomElement.prototype.createNewEl = function () {
-    let newElem;
-
-    if (this.selector.startsWith('.')) {
-       newElem = document.createElement('div');
-       newElem.classList = this.selector;
-       body.appendChild(newElem);
-    } else if (this.selector.startsWith('#')) {
-        newElem = document.createElement('p');
-        newElem.id = this.selector;
-        body.appendChild(newElem);
     }
 
-    newElem.style.cssText = `
-        height: ${this.height}px;
-        width: ${this.width}px;
-        background: ${this.bg};
-        font-size: ${this.fontSize}px;
-        position: ${this.fontSize};
-    `
+    let body = document.querySelector('body')
 
-    newElem.innerText = `${this.text}`
-}
 
-function answer() {
-    prompt('Введите текст', 'Здрасьте!')
-}
+    DomElement.prototype.createNewEl = function () {
+        let newElem;
 
-let newElDiv = new DomElement('.block', 100, 100, 'red', 20, 'static', prompt('Введите любой текст', ''));
-let newElParagraph = new DomElement('#best', 100, 300, 'yellow','static', 40, prompt('Введите любой текст', ''));
-console.log('newElDiv: ', newElDiv);
-console.log('newElParagraph: ', newElParagraph);
+        if (this.selector.startsWith('.')) {
+        newElem = document.createElement('div');
+        newElem.classList = this.selector;
+        body.appendChild(newElem);
+        } else if (this.selector.startsWith('#')) {
+            newElem = document.createElement('p');
+            newElem.id = this.selector;
+            body.appendChild(newElem);
+        }
 
-newElDiv.createNewEl();
-newElParagraph.createNewEl();
+        newElem.style.cssText = `
+            height: ${this.height}px;
+            width: ${this.width}px;
+            background: ${this.bg};
+            font-size: ${this.fontSize}px;
+            position: ${this.position};
+        `
 
-document.addEventListener('DOMContentLoaded', function () {
-    let threeElement = new DomElement('.block', 100, 100, 'red', 20, 'absolute', prompt('Введите любой текст', ''));
+        newElem.innerText = `${this.text}`
+    }
+
+    let newElDiv = new DomElement('.block', 100, 100, 'red', 20, 'static', prompt('Введите любой текст', ''));
+    let newElParagraph = new DomElement('#best', 100, 300, 'yellow', 40, 'static', prompt('Введите любой текст', ''));
+    console.log('newElDiv: ', newElDiv);
+    console.log('newElParagraph: ', newElParagraph);
+
+    newElDiv.createNewEl();
+    newElParagraph.createNewEl();
+
+    //- доп задание
+    let threeElement = new DomElement('.new-block', 100, 100, 'blue', 20, 'absolute', prompt('Введите любой текст', ''));
     threeElement.createNewEl();
+
+
+    console.log(threeElement);
+
+
+    DomElement.prototype.game = function () {
+        let travel = 10;
+        document.addEventListener('keyup', function (e) {
+            if (e.key === 'ArrowUp') {
+
+                console.log();
+            }
+        })
+    }
+
+
+    threeElement.game();
+
 
 })
 
