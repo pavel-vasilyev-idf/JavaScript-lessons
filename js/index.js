@@ -87,8 +87,7 @@ class AppData {
 
 AppData.prototype.start = function () { 
 
-    this.getExpenses();
-    this.getIncome();
+    this.getExpInc();
     this.getExpensesMonth();
     this.getAddExpenses();
     this.getAddIncome();
@@ -157,17 +156,22 @@ AppData.prototype.getIncome = function () {
         }
     })
 },
+AppData.prototype.getExpInc = function () {
+    const count = item => {
+        const startStr = item.className.split('-')[0];
+        const itemTitle = item.querySelector(`.${startStr}-title`).value;
+        const itemAmount = item.querySelector(`.${startStr}-amount`).value;
+        if (itemTitle !== '' && itemAmount !== '') {
+            this[startStr][itemTitle] = +itemAmount;
+            this.incomeMonth += startStr === 'income' ? +itemAmount : null;
+        }
+    };
+
+    document.querySelectorAll('.income-items').forEach(count);
+    document.querySelectorAll('.expenses-items').forEach(count);
+},
 AppData.prototype.getPeriodAmount = function () {  
     periodAmount.innerHTML = periodSelect.value;
-},
-AppData.prototype.getExpenses = function () {
-    expensesItems.forEach((item) => {
-        let itemExpenses = item.querySelector('.expenses-title').value;
-        let cacheExpenses = item.querySelector('.expenses-amount').value;
-        if (itemExpenses !== '' && cacheExpenses !== '') {
-            this.expenses[itemExpenses] = +cacheExpenses;
-        }
-    })
 },
 AppData.prototype.getAddExpenses = function () {  
     let addExpenses = additionalExpensesItem.value.split(',');
