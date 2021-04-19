@@ -1,49 +1,27 @@
-'use strict'
+class First {
+    constructor() {
 
-function DomElement( selector, height, width, bg, fontSize, text ) {
-    this.selector = selector,
-    this.height = height,
-    this.width = width,
-    this.bg = bg,
-    this.fontSize = fontSize,
-    this.text = text
-
-}
-
-let body = document.querySelector('body')
-
-
-DomElement.prototype.createNewEl = function () {
-    let newElem;
-
-    if (this.selector.startsWith('.')) {
-       newElem = document.createElement('div');
-       newElem.classList = this.selector;
-       body.appendChild(newElem);
-    } else if (this.selector.startsWith('#')) {
-        newElem = document.createElement('p');
-        newElem.id = this.selector;
-        body.appendChild(newElem);
     }
 
-    newElem.style.cssText = `
-        height: ${this.height}px;
-        width: ${this.width}px;
-        background: ${this.bg};
-        font-size: ${this.fontSize}px;
-    `
+    hello() {
+        console.log("Привет я метод родителя!");
+    }
+};
 
-    newElem.innerText = `${this.text}`
-}
 
-function answer() {
-    prompt('Введите текст', 'Здрасьте!')
-}
+let first = new First();
+first.hello()
 
-let newElDiv = new DomElement('.block', 100, 100, 'red', 20, prompt('Введите любой текст', ''));
-let newElParagraph = new DomElement('#best', 100, 300, 'yellow', 40, prompt('Введите любой текст', ''));
-console.log('newElDiv: ', newElDiv);
-console.log('newElParagraph: ', newElParagraph);
+class Second extends First {
+    constructor() {
+        super(First)
+    }
 
-newElDiv.createNewEl();
-newElParagraph.createNewEl();
+    hello() {
+        super.hello();
+        console.log("А я наследуемый метод!");
+    }
+};
+
+let second = new Second();
+second.hello();
