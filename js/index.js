@@ -56,15 +56,6 @@ const isString = (str, comma = false) => {
     return pattern.test(str);
 };
 
-// let start = function () {
-//     money = +prompt(`Ваш месячный доход? (Рос.руб)`, '40000');
-
-//     while (!isNumber(money)) {
-//         money = +prompt(`Вы ничего не ввели. Повторите попытку! (Рос.руб)`);
-//     }
-// };
-// start();
-
 
 
 class AppData {
@@ -89,8 +80,7 @@ AppData.prototype.start = function () {
 
     this.getExpInc();
     this.getExpensesMonth();
-    this.getAddExpenses();
-    this.getAddIncome();
+    this.getAddExpInc();
     this.getBudget();
     this.showResult();
     // //- депозит
@@ -173,6 +163,11 @@ AppData.prototype.getExpInc = function () {
 AppData.prototype.getPeriodAmount = function () {  
     periodAmount.innerHTML = periodSelect.value;
 },
+
+
+
+
+
 AppData.prototype.getAddExpenses = function () {  
     let addExpenses = additionalExpensesItem.value.split(',');
     addExpenses.forEach((item) => { 
@@ -191,6 +186,19 @@ AppData.prototype.getAddIncome = function () {
         }
     })
 },
+
+
+
+AppData.prototype.getAddExpInc = function () {
+    
+}
+
+
+
+
+
+
+
 AppData.prototype.addIncomeBlock = function () {
     let cloneIncomeItem = incomeItems[0].cloneNode(true);
     incomeItems[0].parentNode.insertBefore(cloneIncomeItem, incomeAdd);
@@ -255,6 +263,7 @@ AppData.prototype.calcSaveMoney = function () {
 AppData.prototype.disabledStart =  () => {
     start.disabled = !salaryAmount.value.trim();
 }
+
 AppData.prototype.eventsListeners = function () {
     const newStart = appData.start.bind(this); //- Связь appData с контекстами this
     start.addEventListener('click', newStart);
@@ -267,6 +276,8 @@ AppData.prototype.eventsListeners = function () {
     periodSelect.addEventListener('input', this.getPeriodAmount);
     // - Cрок достижения цели в месяцах (результат вызова функции getTargetMonth) 
     // console.log(appData.getTargetMonth()); 
+
+    depositCheck.addEventListener('change', this.depositHandler)
 }
 
 const appData = new AppData();
