@@ -141,8 +141,6 @@ class AppData {
         document.querySelectorAll('.data input[type=text]').forEach((item) => {
             item.disabled = disabled;
         });
-        depositCheck.disabled = disabled;
-        depositBank.disabled = disabled;
     }
 
     getIncome() {
@@ -247,7 +245,7 @@ class AppData {
     }
 
     disabledStart() {
-        start.disabled = !salaryAmount.value.trim();
+        start.disabled = !salaryAmount.value.trim() || (depositCheck.checked && !(depositPercent.value.trim() && depositAmount.value.trim()));
     }
 
     getInfoDeposit() {
@@ -257,8 +255,19 @@ class AppData {
         }
     }
 
+    check() {
+        if (depositPercent.value < 0 || depositPercent.value > 100 ) {
+            depositPercent.value = '';
+            alert('Введите корректное значение в поле проценты');
+        } else {
+            return
+        }
+    }
+
+
     changPercent() {
         const valueSelect = this.value;
+
         if (!valueSelect) {
             depositAmount.disabled = true;
         } else {
@@ -275,22 +284,22 @@ class AppData {
 
     depositHandler() {
         if (depositCheck.checked) {
-            depositBank.style.display = 'inline-block';
-            depositCalc.style.display = 'block';
+            depositBank.style.display = 'block';
             depositAmount.style.display = 'inline-block';
             depositAmount.disabled = true;
             this.deposit = true;
             depositBank.addEventListener('change', this.changPercent);
         } else {
             depositBank.style.display = 'none';
-            depositCalc.style.display = 'none';
             depositAmount.style.display = 'none';
             depositPercent.style.display = 'none';
             depositBank.value = '';
             depositAmount.value = '';
+            depositPercent.value = '';
             this.deposit = false;
             depositBank.removeEventListener('change', this.changPercent);
         }
+        this.disabledStart();
     }
     
     eventsListeners() {
@@ -305,6 +314,10 @@ class AppData {
         periodSelect.addEventListener('input', this.getPeriodAmount);
         // - Cрок достижения цели в месяцах (результат вызова функции getTargetMonth) 
         // console.log(appData.getTargetMonth()); 
+        depositAmount.addEventListener('input', this.disabledStart);
+        depositPercent.addEventListener('input', this.disabledStart);
+        // depositAmount.addEventListener('focus', this.check);
+        depositPercent.addEventListener('input', this.check);
         depositCheck.addEventListener('change', this.depositHandler.bind(this));
     }
 
