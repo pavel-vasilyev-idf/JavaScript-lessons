@@ -275,9 +275,10 @@ class AppData {
 
     depositHandler() {
         if (depositCheck.checked) {
-            depositBank.style.display = 'block';
+            depositBank.style.display = 'inline-block';
             depositCalc.style.display = 'block';
             depositAmount.style.display = 'inline-block';
+            depositAmount.disabled = true;
             this.deposit = true;
             depositBank.addEventListener('change', this.changPercent);
         } else {
