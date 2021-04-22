@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		const timerSeconds = document.querySelector('#timer-seconds');
 		const timerDays = document.querySelector('#timer-days');
 		const spanToDays = document.querySelector('.dott-days');
+		let clear = 0;
 
 		function getTimeRemaining() {
 			const dateStop = new Date(dedline).getTime();
@@ -51,15 +52,16 @@ window.addEventListener('DOMContentLoaded', () => {
 			}
 			if (timer.timeRemaining < 0) {
 				const endDate = new Date(dedline);
-				endDate.setDate(endDate.getDate() + 1);
+				endDate.setDate(endDate.getDate());
 				countTimer(endDate);
+				clearInterval(clear);
 			}
 		}
-		setInterval(updateClock, 1000);
+		clear = setInterval(updateClock, 1000);
+		console.log('clear: ', clear);
 	}
 
 	// setInterval(countTimer, 1000, '22 April 2021');
 	// countTimer('22 April 2021');
-
-	countTimer('24 April 2021');
+	countTimer('23 April 2021');
 });
