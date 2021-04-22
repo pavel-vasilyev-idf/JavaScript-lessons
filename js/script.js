@@ -58,7 +58,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 		clear = setInterval(updateClock, 1000);
-		console.log('clear: ', clear);
+		// console.log('clear: ', clear);
 	}
 
 	// setInterval(countTimer, 1000, '22 April 2021');

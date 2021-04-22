@@ -2,8 +2,10 @@
 window.addEventListener('DOMContentLoaded', () => {
 
 
-	const date = new Date(),
-		days = [
+	function counterTime(toNewYar) {
+		let clear = 0;
+
+		const daysOfWeekArray = [
 			'Воскресенье',
 			'Понедельник',
 			'Вторник',
@@ -11,37 +13,76 @@ window.addEventListener('DOMContentLoaded', () => {
 			'Четверг',
 			'Пятница',
 			'Суббота'
-		],
-		hours = date.getHours(),
-		day = days[date.getDay()],
-		time = date.toLocaleTimeString('en'),
-		newDate = new Date(new Date().getFullYear() + 1, 0, 1);
+		];
 
-	console.log(Math.ceil((newDate.getTime() - date.getTime()) / 1000 / 60 / 60 / 24));
 
-	const greeting = document.createElement('div'),
-		dyaOfWeek = document.createElement('div'),
-		currentTime = document.createElement('div'),
-		newYearDays = document.createElement('div');
 
-	const countDayToNewYear = num => {
-		const textVariant = [' день', ' дня', ' дней'];
-		const firstVariant = num % 100,
-			n2 = num % 10;
-		return firstVariant > 4 && firstVariant < 21 ? num + textVariant[2] :
-			n2 === 1 ? num + textVariant[0] :
-				n2 > 1 && n2 < 5 ? num + textVariant[1] :
-					num + textVariant[2];
-	};
+		function getTimeRemaining() {
+			const date = new Date();
+			const year = date.getFullYear();
+			const day = date.getDay();
+			const hour = date.getHours();
+			const minutes = date.getMinutes();
+			const seconds = date.getSeconds();
+			const newYear = new Date(toNewYar).getTime();
+			const dateNow = new Date().getTime();
+			const timeRemaining = Math.floor((newYear - dateNow) / 1000 / 60 / 60 / 24);
+			return {
+				date,
+				year,
+				day,
+				hour,
+				minutes,
+				seconds,
+				timeRemaining
 
-	greeting.textContent = hours < 5 || hours > 22 ? 'Доброй ночи' :
-		hours < 10 ? 'Доброе утро' :
-			hours < 17 ? 'Добрый день' :
-				'Добрый вечер';
-	dyaOfWeek.textContent = 'Сегодня: ' + day;
-	currentTime.textContent = 'Текущее время: ' + time;
-	newYearDays.textContent = 'До нового года осталось ' +
-    countDayToNewYear(Math.ceil((newDate.getTime() - date.getTime()) / 1000 / 60 / 60 / 24));
+			};
+		}
 
-	document.body.append(greeting, dyaOfWeek, currentTime, newYearDays);
+		const greeting = document.createElement('div');
+		const dyaOfWeek = document.createElement('div');
+		const currentTime = document.createElement('div');
+		const newYearDays = document.createElement('div');
+
+		function updateClock() {
+			const timer = getTimeRemaining();
+			const newHour = timer.hour < 10 ? `0${timer.hour}` : timer.hour;
+			const newMinutes = timer.minutes < 10 ? `0${timer.minutes}` : timer.minutes;
+			const newSeconds = timer.seconds < 10 ? `0${timer.seconds}` : timer.seconds;
+			const newPeriodOfDay = timer.hour <= 12 ? `AM` : `PM`;
+
+			const changeNewYarOfDays = day => {
+				const textVariant = [' день', ' дня', ' дней'];
+				const n1 = day % 100,
+					n2 = day % 10;
+				return n1 > 4 && n1 < 21 ? day + textVariant[2] :
+					n2 === 1 ? day + textVariant[0] :
+						n2 > 1 && n2 < 5 ? day + textVariant[1] :
+							day + textVariant[2];
+			};
+			const newYearDate = changeNewYarOfDays(timer.timeRemaining);
+
+
+			greeting.textContent = timer.hour >= 0 && timer.hour < 5 ? 'Доброй ночи' :
+				timer.hour >= 6 &&  timer.hour < 12 ? 'Доброе утро' :
+					timer.hour >= 12 &&  timer.hour < 18 ? 'Добрый день' : 'Добрый вечер';
+			dyaOfWeek.textContent = `Сегодная: ${daysOfWeekArray[timer.day]}`;
+			currentTime.textContent = `Текущее время: ${newHour} : ${newMinutes} : ${newSeconds} ${newPeriodOfDay}`;
+			newYearDays.textContent = `До нового года осталось: ${newYearDate} `;
+
+			document.body.append(greeting, dyaOfWeek, currentTime, newYearDays);
+
+			if (timer.timeRemaining < 0) {
+				clearInterval(clear);
+			}
+		}
+		// updateClock();
+		clear = setInterval(updateClock, 1000);
+
+
+	}
+
+
+	counterTime('01 January 2022');
+
 });
