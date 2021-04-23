@@ -63,7 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// setInterval(countTimer, 1000, '22 April 2021');
 	// countTimer('22 April 2021');
-	countTimer('23 April 2021');
+	countTimer('31 May 2021');
 
 
 
