@@ -71,21 +71,21 @@ window.addEventListener('DOMContentLoaded', () => {
 	//menu
 
 	const toggleMenu = () => {
-		
+
 		const menu = document.querySelector('menu');
 		const body = document.querySelector('body');
 
 		const handlerMenu = () => {
 			menu.classList.toggle('active-menu');
-		}
+		};
 
-		body.addEventListener('click', (event) => {
+		body.addEventListener('click', event => {
 			let target = event.target;
-			if (target.closest('.menu') || (!target.closest('menu') &&
-            menu.classList.contains('active-menu'))) {
+			if (target.closest('.menu')) {
 				handlerMenu();
-			}
-			else if (target.closest('.close-btn') || target.closest('[href^="#"]')) {
+			} else if (!target.closest('.close-btn')) {
+				menu.classList.remove('active-menu');
+			} else if (target.closest('[href^="#"]')) {
 				menu.classList.remove('active-menu');
 			} else {
 				target = target.closest('.active-menu');
@@ -94,12 +94,12 @@ window.addEventListener('DOMContentLoaded', () => {
 				}
 			}
 		});
-		
+
 	};
 
 	toggleMenu();
 
-	
+
 
 
 	//popup
@@ -117,9 +117,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		const showPopup = () => {
 
+			// eslint-disable-next-line max-len
 			popupData.startPos > popupData.endPos ? popupData.count -= popupData.speed : popupData.count += popupData.speed;
 			popupContent.style.transform = `translateY(${popupData.count}px)`;
 
+			// eslint-disable-next-line max-len
 			if (popupData.startPos > popupData.endPos ? popupData.count > popupData.endPos : popupData.count < popupData.endPos) {
 				requestAnimationFrame(showPopup);
 			}
@@ -136,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 
 
-		popup.addEventListener('click', (event) => {
+		popup.addEventListener('click', event => {
 			let target = event.target;
 
 			if (target.classList.contains('popup-close')) {
@@ -144,13 +146,13 @@ window.addEventListener('DOMContentLoaded', () => {
 			} else {
 				target = target.closest('.popup-content');
 				if (!target) {
-					popup.style.display = 'none';	
+					popup.style.display = 'none';
 				}
 			}
 		});
 
 	};
-	
+
 	togglePopUp();
 
 
@@ -163,7 +165,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		const tab = tabHeader.querySelectorAll('.service-header-tab');
 		const tabContent = document.querySelectorAll('.service-tab');
 
-		const toggleTabContent = (index) => {
+		const toggleTabContent = index => {
 			for (let i = 0; i < tabContent.length; i++) {
 				if (index === i) {
 					tab[i].classList.add('active');
@@ -173,22 +175,22 @@ window.addEventListener('DOMContentLoaded', () => {
 					tabContent[i].classList.add('d-none');
 
 				}
-				
+
 			}
 		};
 
-		tabHeader.addEventListener('click', (event) => {
+		tabHeader.addEventListener('click', event => {
 			let target = event.target;
-				target = target.closest('.service-header-tab');
+			target = target.closest('.service-header-tab');
 
 			if (target) {
-				tab.forEach( (item, index) => {
+				tab.forEach((item, index) => {
 					if (item === target) {
-						toggleTabContent(index)
+						toggleTabContent(index);
 					}
 				});
 			}
-		})
+		});
 	};
 
 	tabs();
@@ -200,33 +202,32 @@ window.addEventListener('DOMContentLoaded', () => {
 	const slider = () => {
 		const slider = document.querySelector('.portfolio-content');
 		const slide = document.querySelectorAll('.portfolio-item');
-		const btn = document.querySelectorAll('.portfolio-btn');
 		const portfolioDots = document.querySelector('.portfolio-dots');
 
 		const addDots = () => {
-			
+
 			slide.forEach(() => {
 				const newDot = document.createElement('li');
 				newDot.classList.add('dot');
 				portfolioDots.appendChild(newDot);
-			})
+			});
 			portfolioDots.children[0].classList.add('dot-active');
-			
+
 		};
 
 		addDots();
 
-		
+
 		const dot = document.querySelectorAll('.dot');
 
 		let currentSlide = 0; //Номер слайда, начинаем с нуля. Значение будет меняться
 		let interval = 0;
-		
-		const prevSlide = (elem, index,strClass) => {
+
+		const prevSlide = (elem, index, strClass) => {
 			elem[index].classList.remove(strClass);
 		};
 
-		const nextSlide = (elem, index,strClass) => {
+		const nextSlide = (elem, index, strClass) => {
 			elem[index].classList.add(strClass);
 		};
 
@@ -240,7 +241,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			}
 			nextSlide(slide, currentSlide, 'portfolio-item-active');
 			nextSlide(dot, currentSlide, 'dot-active');
-			
+
 
 		};
 
@@ -255,9 +256,9 @@ window.addEventListener('DOMContentLoaded', () => {
 		};
 
 		//клик по кнопкам-стрелочкам
-		slider.addEventListener('click', (event) => {
+		slider.addEventListener('click', event => {
 			event.preventDefault();
-			let target = event.target;
+			const target = event.target;
 
 
 			prevSlide(slide, currentSlide, 'portfolio-item-active');
@@ -265,7 +266,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			if (!target.matches('.portfolio-btn, .dot')) {
 				return;
-			};
+			}
 
 
 			if (target.matches('#arrow-right')) {
@@ -277,8 +278,8 @@ window.addEventListener('DOMContentLoaded', () => {
 					if (item === target) {
 						currentSlide = index;
 					}
-				})
-			};
+				});
+			}
 
 			if (currentSlide >= slide.length) {
 				currentSlide = 0;
@@ -291,23 +292,22 @@ window.addEventListener('DOMContentLoaded', () => {
 			nextSlide(dot, currentSlide, 'dot-active');
 		});
 
-		slider.addEventListener('mouseover', (event) => {
+		slider.addEventListener('mouseover', event => {
 			if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
 				stopSlide();
 			}
 		});
-		slider.addEventListener('mouseout', (event) => {
+		slider.addEventListener('mouseout', event => {
 			if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
 				startSlide();
 			}
 		});
 
-		startSlide(5000);
-		
+		startSlide(2000);
 
-	}
+
+	};
 
 	slider();
 
 });
- 
