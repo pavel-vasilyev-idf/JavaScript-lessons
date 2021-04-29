@@ -1,4 +1,3 @@
-
 window.addEventListener('DOMContentLoaded', () => {
 
 
@@ -362,6 +361,40 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	checkFooterForm();
 
+	const checkModalForm = () => {
+		const modalForm = document.querySelector('#form3');
+
+		modalForm.addEventListener('input', (event) => {
+			let target = event.target;
+			if (target.type === 'text') {
+				target.value = target.value.replace(/[^а-яА-ЯЁё\-\ ]/, '');
+			} else if (target.type === 'email') {
+				target.value = target.value.replace(/[^a-zA-Z\@\_\-\.\!\~\*\']/, '');
+			} else if (target.type === 'tel') {
+				target.value = target.value.replace(/[^\d\(\)\-]/g, '');
+			}
+		});
+	};
+
+	checkModalForm();
+
+	const checkFormOne = () => {
+		const oneForm = document.querySelector('#form1');
+
+		oneForm.addEventListener('input', (event) => {
+			let target = event.target;
+			if (target.type === 'text') {
+				target.value = target.value.replace(/[^а-яА-ЯЁё\-\ ]/, '');
+			} else if (target.type === 'email') {
+				target.value = target.value.replace(/[^a-zA-Z\@\_\-\.\!\~\*\']/, '');
+			} else if (target.type === 'tel') {
+				target.value = target.value.replace(/[^\d\(\)\-]/g, '');
+			}
+		});
+	};
+
+	checkFormOne();
+
 
 	// 6 point task 23
 
@@ -433,8 +466,8 @@ window.addEventListener('DOMContentLoaded', () => {
 			let total = 0;
 			let countValue = 1;
 			let dayValue = 1;
-			const typeValue = calcType.options[calcType.selectedIndex].value;
-			const squareValue = +calcSquare.value;
+			let typeValue = calcType.options[calcType.selectedIndex].value;
+			let squareValue = +calcSquare.value;
 
 			if (calcCount.value > 1) {
 				countValue += (calcCount.value - 1) / 10;
@@ -448,7 +481,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			if (typeValue && squareValue) {
 				total = price * typeValue * squareValue * countValue * dayValue;
-			};
+			} else if (typeValue === '') {
+				calcSquare.value = '';
+				calcDay.value = '';
+				calcCount.value = '';
+			}
 
 			totalValue.textContent = total;
 			animateValue(totalValue, 0, totalValue.textContent, 800);
@@ -483,4 +520,3 @@ window.addEventListener('DOMContentLoaded', () => {
 	calc(100);
 
 });
- 
