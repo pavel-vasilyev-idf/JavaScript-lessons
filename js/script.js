@@ -451,6 +451,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			};
 
 			totalValue.textContent = total;
+			animateValue(totalValue, 0, totalValue.textContent, 800);
 
 		};
 
@@ -462,9 +463,20 @@ window.addEventListener('DOMContentLoaded', () => {
 			};
 		}); 
 
-
-
-
+		function animateValue(obj, start, end, duration) {
+			let startTimestamp = null;
+			const step = (timestamp) => {
+			  if (!startTimestamp) startTimestamp = timestamp;
+			  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+			  obj.innerHTML = Math.floor(progress * (end - start) + start);
+			  if (progress < 1) {
+				window.requestAnimationFrame(step);
+			  }
+			};
+			window.requestAnimationFrame(step);
+		  }
+		
+		  
 
 	}
 
