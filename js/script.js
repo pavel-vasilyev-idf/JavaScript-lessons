@@ -542,7 +542,9 @@ window.addEventListener('DOMContentLoaded', () => {
 			form.addEventListener('submit', (event) => {
 				event.preventDefault();
 				form.appendChild(statusMessage);
-				statusMessage.textContent = loadMessage;
+				statusMessage.innerHTML = `
+					<img src="https://i.gifer.com/YmvJ.gif" alt="">
+				`;
 	
 				const formData = new FormData(form);
 				let body = {};
