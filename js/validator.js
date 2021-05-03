@@ -1,23 +1,31 @@
 class Validator{
     constructor({selector, pattern, method}){
-        this.selector = selector; //селектор формы
+        this.form = document.querySelector(selector); //селектор формы
         this.method = method; //кастомные шаблоны валидаторов
         this.pattern = pattern; //настройки, где укзаано какие конкретно поля валидируются и какие свойства указываются
     }
 
 
     init() {
-        console.log(this.selector);
+        this.applyStyle();
+        console.log(this.form.elements);
     }
 
     showError(elem) {
         elem.classList.remove('success');
         elem.classList.add('error');
+        const errorDiv = document.createElement('div');
+        errorDiv.textContent = 'Error';
+        errorDiv.classList.add('validator-error');
+        elem.insertAdjacentElement('afterend', errorDiv);
     }
 
     showSuccess(elem) {
         elem.classList.remove('error');
         elem.classList.add('success');
+        if (elem.nextElementSibling.classList.contains('validator-error')) {
+            elem.nextElementSibling.remove();
+        }
     }
 
     applyStyle() {
@@ -28,6 +36,10 @@ class Validator{
             }
             input.error {
                 border: 2px solid red;
+            }
+            .validator-error {
+                font-size: 14px;
+                color: red;
             }
         `;
         document.head.appendChild(style);
@@ -43,4 +55,3 @@ const valid = new Validator({
 });
 
 valid.init();
-valid.applyStyle();

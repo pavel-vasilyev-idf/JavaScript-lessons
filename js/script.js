@@ -482,5 +482,49 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	calc(100);
 
+
+	//send-ajax-form
+
+	const sendForm = () => {
+
+		const errorMessage = 'Что-то пошло не так...';
+		const loadMessage = 'Загрузка...';
+		const successMessage = 'Все успешно отпралвено';
+
+		const form = document.getElementById('form1');
+
+		const statusMessage = document.createElement('div');
+
+		// statusMessage.textContent = 'Сообщение о статусе отправки'
+		// form.appendChild(statusMessage);
+		statusMessage.style.cssText = 'font-size: 3rem';
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			form.appendChild(statusMessage);
+
+
+
+			const request = new XMLHttpRequest();
+			request.open('POST', 'server.php');
+			request.setRequestHeader('Content-Type', 'multipart/form-data');
+			const formData = new FormData(form);
+
+			request.send(formData);
+
+
+			request.addEventListener('readystatechange', () => {
+				
+			})
+
+		})
+
+
+
+
+
+	}
+
+	sendForm();
 });
  
