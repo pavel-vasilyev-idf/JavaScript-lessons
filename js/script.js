@@ -353,60 +353,101 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// 6 point task 23
 
-	const	userName = document.querySelectorAll('[name=user_name]');
-	const	userMessage = document.querySelectorAll('[name=user_message]');
-	const	userEmail = document.querySelectorAll('[name=user_email]');
+	    const validateInputs = () => {
+		const calcInputs = document.querySelectorAll('input.calc-item'),
+		    formName = document.querySelectorAll('[name=user_name]'),
+		    formMessage = document.querySelectorAll('[name=user_message]'),
+		    formEmail = document.querySelectorAll('[name=user_email]'),
+		    formPhone = document.querySelectorAll('[name=user_phone]');
 
-	//check inputs on ''
-	const checkInputs = (input, exp) => {
-		if (!!input.value.match(exp)) {
-						input.value = input.value.replace(exp, '');
-		} else {
-			return;
+		let error = new Set();
+
+		const validateNumberInputs = () => {
+		    calcInputs.forEach(el => {
+			el.value = el.value.replace(/[^\d]/g, '');
+		    })
+		};
+
+		const validateLetterInputs = (input) => {
+		    input.value = input.value.replace(/[^а-яё0-9\.\,\:\-\!\? ]/gi, '');
+		};
+
+		const inputsHandler = (e) => {
+		    if (e.target.matches('.calc-item')) {
+			validateNumberInputs();
+		    }
+		    if (e.target.matches('[name=user_name]')) {
+			e.target.value = e.target.value.replace(/[^а-яё\-\ ]/gi, '');
+		    }
+		    if (e.target.matches('#form2-message')) {
+			validateLetterInputs(e.target);
+		    }
+		    if (e.target.matches('[name=user_email]')) {
+			e.target.value = e.target.value.replace(/[^a-z\@\_\-\.\!\~\*\']/gi, '');
+		    }
+		    if (e.target.matches('[name=user_phone]')) {
+			e.target.value = e.target.value.replace(/[^\d\(\)\-\+]/g, '');
+		    }
 		}
-	}
 
-	const clearInput = (item) => {
-		item.value = item.value.replace(/\s+/g, ' ');
-		item.value = item.value.replace(/\-+/g, '-');
+		const trim = (input) => {
+		    input.value = input.value.replace(/\s+/g, ' ');
+		    input.value = input.value.replace(/\-+/g, '-');
 
-			let regExpElem = new RegExp("ReGeX" + item.value + "ReGeX");
-			if (/^[/ /-]/.test(regExpElem)) {
-				item.value = item.value.replace(/^[/ /-]/, '')
-			}
-			if(/[/ /-]$/.test(regExpElem)) {
-				item.value = item.value.replace(/[/ /-]$/, '')
-			}
-	}
+		    let inputToExp = new RegExp("ReGeX" + input.value + "ReGeX");
+		    if (/^[/ /-]/.test(inputToExp)) {
+			input.value = input.value.replace(/^[/ /-]/, '')
+		    }
+		    if (/[/ /-]$/.test(inputToExp)) {
+			input.value = input.value.replace(/[/ /-]$/, '')
+		    }
+		}
 
-	function capitalize(elem) {
-			let inputValue = elem.value
-			return inputValue.split(' ').map(item => 
-					item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()).join(' ');
-	}
+		const capitalize = (input) => {
+		    let inputValue = input.value
+		    return inputValue.split(' ').map(item =>
+			item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()).join(' ');
+		}
 
-	userName.forEach(el => {
-			el.addEventListener('blur', () => {
-					checkInputs(el, /[^а-яА-ЯЁё\-\ ]/);
-					clearInput(el);
-					el.value = capitalize(el)
-			})
-	})
+		const controlInputs = (input, exp, message = 'Введите корректные данные') => {
+		    if (!input.value.match(exp)) {
+			error.add(input.value)
+			input.value = '';
+		    } 
+		}
 
-	userMessage.forEach(el => {
-			el.addEventListener('blur', () => {
-					checkInputs(el, /[^а-яА-ЯЁё\-\ ]/);
-					clearInput(el);
-			})
-	})
+		formName.forEach(el => {
+		    el.addEventListener('blur', () => {
+			trim(el);
+			el.value = capitalize(el);
+			controlInputs(el, /[а-яё]{2,}/gi);
+		    })
+		})
 
-	userEmail.forEach(el => {
-			el.addEventListener('blur', () => {
-					checkInputs(el, /[^a-zA-Z\@\_\-\.\!\~\*\']/);
-					clearInput(el);
-			})
-	})
+		formMessage.forEach(el => {
+		    el.addEventListener('blur', () => {
+			controlInputs(el, /[^а-яё0-9\.\,\:\-\!\? ]/gi);
+			trim(el);
+		    })
+		})
 
+		formEmail.forEach(el => {
+		    el.addEventListener('blur', () => {
+			controlInputs(el, /\w+@\w+\.\w{2,3}/g);
+			trim(el);
+		    })
+		})
+
+		formPhone.forEach(el => {
+		    el.addEventListener('blur', () => {
+			trim(el);
+			controlInputs(el, /\+?[78]([-()]*\d){10}/g);
+		    })
+		})
+
+		window.addEventListener('input', inputsHandler);
+	    }
+	    validateInputs();
 
 	//calculator
 	const calc = (price = 100) => {
