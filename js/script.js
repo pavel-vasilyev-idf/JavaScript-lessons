@@ -70,33 +70,22 @@ window.addEventListener('DOMContentLoaded', () => {
 	//menu
 
 	const toggleMenu = () => {
-		
-		const menu = document.querySelector('menu');
-		const body = document.querySelector('body');
+		const btnMenu = document.querySelector('.menu'),
+		    menu = document.querySelector('menu'),
+		    closeBtn = document.querySelector('.close-btn'),
+		    menuItems = menu.querySelectorAll('ul>li');
 
-		const handlerMenu = () => {
+		window.addEventListener('click', (event) => {
+		    let target = event.target;
+		    if (target.closest('.menu') || target.closest('menu')) {
 			menu.classList.toggle('active-menu');
-		}
+		    } else if (!target || !target.closest('menu')) {
+			menu.classList.remove('active-menu');
+		    }
+		})
 
-		body.addEventListener('click', (event) => {
-			let target = event.target;
-			if (target.closest('.menu') || (!target.closest('menu') &&
-            menu.classList.contains('active-menu'))) {
-				handlerMenu();
-			}
-			else if (target.closest('.close-btn') || target.closest('[href^="#"]')) {
-				handlerMenu();
-			} else {
-				target = target.closest('.active-menu');
-				if (!target) {
-					handlerMenu();
-				}
-			}
-		});
-		
-	};
-
-	// toggleMenu();
+    	};
+    toggleMenu();
 
 	
 
@@ -503,10 +492,13 @@ window.addEventListener('DOMContentLoaded', () => {
 			const target = event.target;
 
 			if (target.matches('.form-phone')) {
-				target.value = target.value.replace(/[^+\d]/g, '');
+				target.value = target.value.replace(/[^\d\(\)\-]/g, '');
 			}
 			if (target.name === 'user_name') {
 				target.value = target.value.replace(/[^а-яё ]/gi, '');
+			}
+			if (target.name === 'user_email') {
+				target.value = target.value.replace(/[^a-z\@\_\-\.\!\~\*\']/gi, '');
 			}
 			if (target.matches('.mess')) {
 				target.value = target.value.replace(/[^а-яё ,.]/gi, '');
@@ -557,13 +549,25 @@ window.addEventListener('DOMContentLoaded', () => {
 				});
 	
 				postData(body, () => {
-					statusMessage.textContent = successMessage;
-					clearInput(elem);
-				}, 
-				(error) => {
-					console.error(error);
-					statusMessage.textContent = errorMessage;
+				    statusMessage.textContent = succesMessage;
+				    clearInput(elem);
+				    setTimeout(() => {
+					statusMessage.innerHTML = '';
+					document.querySelector('.popup').style.display = 'none';
+				    }, 4000)
+				    let formInputs = form.querySelectorAll('input');
+				    formInputs.forEach(input => {
+					input.value = input.defaultValue;
+				    })
+				}, () => {
+				    statusMessage.textContent = errorMessage;
+				    console.error(error);
+				    setTimeout(() => {
+					statusMessage.innerHTML = '';
+					document.querySelector('.popup').style.display = 'none';
+				    }, 4000)
 				});
+				
 	
 			});
 		form.addEventListener('input', isValid);
