@@ -576,7 +576,7 @@ toggleMenu();
 				event.preventDefault();
 				form.appendChild(statusMessage);
 				statusMessage.innerHTML = `
-					<img src="https://i.gifer.com/YmvJ.gif" alt="">
+					<img src="https://i.gifer.com/YmvJ.gif" alt="cat">
 				`;
 	
 				const formData = new FormData(form);
@@ -590,7 +590,7 @@ toggleMenu();
 				});
 	
 				postData(body, () => {
-				    statusMessage.textContent = succesMessage;
+				    statusMessage.textContent = successMessage;
 				    clearInput(elem);
 				    setTimeout(() => {
 					statusMessage.innerHTML = '';
