@@ -70,33 +70,22 @@ window.addEventListener('DOMContentLoaded', () => {
 	//menu
 
 	const toggleMenu = () => {
-		
-		const menu = document.querySelector('menu');
-		const body = document.querySelector('body');
+		const btnMenu = document.querySelector('.menu'),
+				menu = document.querySelector('menu'),
+				closeBtn = document.querySelector('.close-btn'),
+				menuItems = menu.querySelectorAll('ul>li');
 
-		const handlerMenu = () => {
-			menu.classList.toggle('active-menu');
-		}
-
-		body.addEventListener('click', (event) => {
-			let target = event.target;
-			if (target.closest('.menu') || (!target.closest('menu') &&
-            menu.classList.contains('active-menu'))) {
-				handlerMenu();
-			}
-			else if (target.closest('.close-btn') || target.closest('[href^="#"]')) {
-				handlerMenu();
-			} else {
-				target = target.closest('.active-menu');
-				if (!target) {
-					handlerMenu();
+		window.addEventListener('click', (event) => {
+				let target = event.target;
+				if (target.closest('.menu') || target.closest('menu')) {
+						menu.classList.toggle('active-menu');
+				} else if (!target || !target.closest('menu')) {
+						menu.classList.remove('active-menu');
 				}
-			}
-		});
-		
-	};
+		})
 
-	toggleMenu();
+};
+toggleMenu();
 
 	
 
