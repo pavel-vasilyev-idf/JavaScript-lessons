@@ -70,33 +70,22 @@ window.addEventListener('DOMContentLoaded', () => {
 	//menu
 
 	const toggleMenu = () => {
-		
-		const menu = document.querySelector('menu');
-		const body = document.querySelector('body');
+		const btnMenu = document.querySelector('.menu'),
+				menu = document.querySelector('menu'),
+				closeBtn = document.querySelector('.close-btn'),
+				menuItems = menu.querySelectorAll('ul>li');
 
-		const handlerMenu = () => {
-			menu.classList.toggle('active-menu');
-		}
-
-		body.addEventListener('click', (event) => {
-			let target = event.target;
-			if (target.closest('.menu') || (!target.closest('menu') &&
-            menu.classList.contains('active-menu'))) {
-				handlerMenu();
-			}
-			else if (target.closest('.close-btn') || target.closest('[href^="#"]')) {
-				handlerMenu();
-			} else {
-				target = target.closest('.active-menu');
-				if (!target) {
-					handlerMenu();
+		window.addEventListener('click', (event) => {
+				let target = event.target;
+				if (target.closest('.menu') || target.closest('menu')) {
+						menu.classList.toggle('active-menu');
+				} else if (!target || !target.closest('menu')) {
+						menu.classList.remove('active-menu');
 				}
-			}
-		});
-		
-	};
+		})
 
-	// toggleMenu();
+};
+toggleMenu();
 
 	
 
@@ -364,60 +353,101 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// 6 point task 23
 
-	const	userName = document.querySelectorAll('[name=user_name]');
-	const	userMessage = document.querySelectorAll('[name=user_message]');
-	const	userEmail = document.querySelectorAll('[name=user_email]');
+	    const validateInputs = () => {
+		const calcInputs = document.querySelectorAll('input.calc-item'),
+		    formName = document.querySelectorAll('[name=user_name]'),
+		    formMessage = document.querySelectorAll('[name=user_message]'),
+		    formEmail = document.querySelectorAll('[name=user_email]'),
+		    formPhone = document.querySelectorAll('[name=user_phone]');
 
-	//check inputs on ''
-	const checkInputs = (input, exp) => {
-		if (!!input.value.match(exp)) {
-						input.value = input.value.replace(exp, '');
-		} else {
-			return;
+		let error = new Set();
+
+		const validateNumberInputs = () => {
+		    calcInputs.forEach(el => {
+			el.value = el.value.replace(/[^\d]/g, '');
+		    })
+		};
+
+		const validateLetterInputs = (input) => {
+		    input.value = input.value.replace(/[^а-яё0-9\.\,\:\-\!\? ]/gi, '');
+		};
+
+		const inputsHandler = (e) => {
+		    if (e.target.matches('.calc-item')) {
+			validateNumberInputs();
+		    }
+		    if (e.target.matches('[name=user_name]')) {
+			e.target.value = e.target.value.replace(/[^а-яё\-\ ]/gi, '');
+		    }
+		    if (e.target.matches('#form2-message')) {
+			validateLetterInputs(e.target);
+		    }
+		    if (e.target.matches('[name=user_email]')) {
+			e.target.value = e.target.value.replace(/[^a-z\@\_\-\.\!\~\*\']/gi, '');
+		    }
+		    if (e.target.matches('[name=user_phone]')) {
+			e.target.value = e.target.value.replace(/[^\d\(\)\-\+]/g, '');
+		    }
 		}
-	}
 
-	const clearInput = (item) => {
-		item.value = item.value.replace(/\s+/g, ' ');
-		item.value = item.value.replace(/\-+/g, '-');
+		const trim = (input) => {
+		    input.value = input.value.replace(/\s+/g, ' ');
+		    input.value = input.value.replace(/\-+/g, '-');
 
-			let regExpElem = new RegExp("ReGeX" + item.value + "ReGeX");
-			if (/^[/ /-]/.test(regExpElem)) {
-				item.value = item.value.replace(/^[/ /-]/, '')
-			}
-			if(/[/ /-]$/.test(regExpElem)) {
-				item.value = item.value.replace(/[/ /-]$/, '')
-			}
-	}
+		    let inputToExp = new RegExp("ReGeX" + input.value + "ReGeX");
+		    if (/^[/ /-]/.test(inputToExp)) {
+			input.value = input.value.replace(/^[/ /-]/, '')
+		    }
+		    if (/[/ /-]$/.test(inputToExp)) {
+			input.value = input.value.replace(/[/ /-]$/, '')
+		    }
+		}
 
-	function capitalize(elem) {
-			let inputValue = elem.value
-			return inputValue.split(' ').map(item => 
-					item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()).join(' ');
-	}
+		const capitalize = (input) => {
+		    let inputValue = input.value
+		    return inputValue.split(' ').map(item =>
+			item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()).join(' ');
+		}
 
-	userName.forEach(el => {
-			el.addEventListener('blur', () => {
-					checkInputs(el, /[^а-яА-ЯЁё\-\ ]/);
-					clearInput(el);
-					el.value = capitalize(el)
-			})
-	})
+		const controlInputs = (input, exp, message = 'Введите корректные данные') => {
+		    if (!input.value.match(exp)) {
+			error.add(input.value)
+			input.value = '';
+		    } 
+		}
 
-	userMessage.forEach(el => {
-			el.addEventListener('blur', () => {
-					checkInputs(el, /[^а-яА-ЯЁё\-\ ]/);
-					clearInput(el);
-			})
-	})
+		formName.forEach(el => {
+		    el.addEventListener('blur', () => {
+			trim(el);
+			el.value = capitalize(el);
+			controlInputs(el, /[а-яё]{2,}/gi);
+		    })
+		})
 
-	userEmail.forEach(el => {
-			el.addEventListener('blur', () => {
-					checkInputs(el, /[^a-zA-Z\@\_\-\.\!\~\*\']/);
-					clearInput(el);
-			})
-	})
+		formMessage.forEach(el => {
+		    el.addEventListener('blur', () => {
+			controlInputs(el, /[^а-яё0-9\.\,\:\-\!\? ]/gi);
+			trim(el);
+		    })
+		})
 
+		formEmail.forEach(el => {
+		    el.addEventListener('blur', () => {
+			controlInputs(el, /\w+@\w+\.\w{2,3}/g);
+			trim(el);
+		    })
+		})
+
+		formPhone.forEach(el => {
+		    el.addEventListener('blur', () => {
+			trim(el);
+			controlInputs(el, /\+?[78]([-()]*\d){10}/g);
+		    })
+		})
+
+		window.addEventListener('input', inputsHandler);
+	    }
+	    validateInputs();
 
 	//calculator
 	const calc = (price = 100) => {
@@ -503,10 +533,13 @@ window.addEventListener('DOMContentLoaded', () => {
 			const target = event.target;
 
 			if (target.matches('.form-phone')) {
-				target.value = target.value.replace(/[^+\d]/g, '');
+				target.value = target.value.replace(/[^\d\(\)\-]/g, '');
 			}
 			if (target.name === 'user_name') {
 				target.value = target.value.replace(/[^а-яё ]/gi, '');
+			}
+			if (target.name === 'user_email') {
+				target.value = target.value.replace(/[^a-z\@\_\-\.\!\~\*\']/gi, '');
 			}
 			if (target.matches('.mess')) {
 				target.value = target.value.replace(/[^а-яё ,.]/gi, '');
@@ -514,27 +547,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 
 
-		// const postData = (body, outputData, errorData) => {
-		// 	const request = new XMLHttpRequest();
-		// 	request.addEventListener('readystatechange', () => {
-		// 		if (request.readyState !== 4) {
-		// 			return;
-		// 		}
-
-		// 		if (request.status === 200) {
-		// 			outputData();
-		// 		} else {
-		// 			errorData(request.status)
-					
-		// 		}
-		// 	})
-		// 	request.open('POST', 'server.php');
-		// 	request.setRequestHeader('Content-Type', 'application/json');
-
-		// 	request.send(JSON.stringify(body));
-		// }
-
 		const postData = (body) => {
+
 			return new Promise((resolve, reject) => {
 				const request = new XMLHttpRequest();
 				request.addEventListener('readystatechange', () => {
@@ -548,12 +562,14 @@ window.addEventListener('DOMContentLoaded', () => {
 						reject(request.status)
 						
 					}
-				});
+				})
 				request.open('POST', 'server.php');
 				request.setRequestHeader('Content-Type', 'application/json');
 
 				request.send(JSON.stringify(body));
-			});
+			})
+
+			
 		}
 
 		const sendSomeForm = (elem) => {
@@ -565,7 +581,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				event.preventDefault();
 				form.appendChild(statusMessage);
 				statusMessage.innerHTML = `
-					<img src="https://i.gifer.com/YmvJ.gif" alt="">
+					<img src="https://i.gifer.com/YmvJ.gif" alt="cat">
 				`;
 	
 				const formData = new FormData(form);
@@ -578,25 +594,48 @@ window.addEventListener('DOMContentLoaded', () => {
 					body[key] = item;
 				});
 	
-				// postData(body, () => {
-				// 	statusMessage.textContent = successMessage;
-				// 	clearInput(elem);
-				// }, 
-				// (error) => {
-				// 	console.error(error);
-				// 	statusMessage.textContent = errorMessage;
-				// });
+				postData(body, () => {
+				    statusMessage.textContent = successMessage;
+				    clearInput(elem);
+				    setTimeout(() => {
+					statusMessage.innerHTML = '';
+					document.querySelector('.popup').style.display = 'none';
+				    }, 4000)
+				    let formInputs = form.querySelectorAll('input');
+				    formInputs.forEach(input => {
+					input.value = input.defaultValue;
+				    })
+				}, () => {
+				    statusMessage.textContent = errorMessage;
+				    console.error(error);
+				    setTimeout(() => {
+					statusMessage.innerHTML = '';
+					document.querySelector('.popup').style.display = 'none';
+				    }, 4000)
+				});
 
 				postData(body)
 					.then(() => {
 						statusMessage.textContent = successMessage;
 						clearInput(elem);
+						setTimeout(() => {
+						statusMessage.innerHTML = '';
+						document.querySelector('.popup').style.display = 'none';
+						}, 4000)
+						let formInputs = form.querySelectorAll('input');
+						formInputs.forEach(input => {
+						input.value = input.defaultValue;
+						})
 					})
-					.catch(() => {
-						console.error(error);
+					.catch((error) => {
 						statusMessage.textContent = errorMessage;
+						console.error(error);
+						setTimeout(() => {
+						statusMessage.innerHTML = '';
+						document.querySelector('.popup').style.display = 'none';
+						}, 4000)
 					})
-	
+
 			});
 		form.addEventListener('input', isValid);
 	};
