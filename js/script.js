@@ -557,6 +557,7 @@ toggleMenu();
 				body: JSON.stringify(body)
 			})
 
+			
 		}
 
 		const sendSomeForm = (elem) => {
@@ -572,6 +573,14 @@ toggleMenu();
 				`;
 	
 				const formData = new FormData(form);
+				let body = {};
+				// for (const val of formData.entries()) {
+				// 	body[val[0]] = val[1];
+				// }			
+	
+				// formData.forEach((item, key) => {
+				// 	body[key] = item;
+				// });
 
 
 				postData(Object.fromEntries(formData))
