@@ -411,8 +411,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			formEmail.forEach(el => {
 				el.addEventListener('blur', () => {
-					controlInputs(el, /\w+@\w+\.\w{2,3}/g);
-					trim(el);
+					el.value = el.value.replace(/\s/g, '');
+					controlInputs(el, /\w+@\w+.\w{2,3}/g);
 				})
 			})
 
