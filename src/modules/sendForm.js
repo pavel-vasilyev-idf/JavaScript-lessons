@@ -3,7 +3,6 @@ const sendForm = () => {
   const errorMessage = 'Что-то пошло не так...';
   const loadMessage = 'Загрузка...';
   const successMessage = 'Все успешно отправлено';
-  statusMessage.style.cssText = 'color: #fff; font-size: 24px;';
 
   const clearInput = (elem) => {
     const form = document.getElementById(elem);
@@ -30,7 +29,8 @@ const sendForm = () => {
   const sendSomeForm = (elem) => {
     const form = document.getElementById(elem);
     const statusMessage = document.createElement('div');
-    statusMessage.style.cssText = 'font-size: 3rem';
+    statusMessage.style.cssText = 'color: #fff; font-size: 24px;';
+
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
