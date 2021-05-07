@@ -56,6 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				clearInterval(clear);
 			}
 		}
+		updateClock();
 		clear = setInterval(updateClock, 1000);
 		// console.log('clear: ', clear);
 	}
@@ -70,22 +71,27 @@ window.addEventListener('DOMContentLoaded', () => {
 	//menu
 
 	const toggleMenu = () => {
-		const btnMenu = document.querySelector('.menu'),
-				menu = document.querySelector('menu'),
-				closeBtn = document.querySelector('.close-btn'),
-				menuItems = menu.querySelectorAll('ul>li');
+		const handlerMenu = (event) => {
+			const target = event.target;
 
-		window.addEventListener('click', (event) => {
-				let target = event.target;
-				if (target.closest('.menu') || target.closest('menu')) {
-						menu.classList.toggle('active-menu');
-				} else if (!target || !target.closest('menu')) {
-						menu.classList.remove('active-menu');
-				}
-		})
+			const displayMenu = () => {
+				document.querySelector('menu').classList.toggle('active-menu');
+			};
 
-};
-toggleMenu();
+			if (target.closest('.menu') ||
+				(!target.closest('menu') &&
+				document.querySelector('menu').classList.contains('active-menu'))) {
+				displayMenu();
+			} else if (target.closest('menu') && target.closest('[href^="#"]')) {
+				displayMenu();
+			}
+		};
+
+		document.body.addEventListener('click', handlerMenu);
+	};
+
+
+	toggleMenu();
 
 	
 
@@ -319,135 +325,104 @@ toggleMenu();
 
 	setCommandImg();
 
-	//calc
-	const checkCalcBlock = () => {
-		const calcBlock = document.querySelector('.calc-block');
-
-		calcBlock.addEventListener('input', (event) => {
-			let target = event.target;
-			if (target.type === 'text') {
-				target.value = target.value.replace(/[^\d]/g, '');
-			}
-		});
-	};
-
-	checkCalcBlock();
-
-	const checkFooterForm = () => {
-		const footerForm = document.querySelector('.footer-form-input');
-
-		footerForm.addEventListener('input', (event) => {
-			let target = event.target;
-			if (target.type === 'text') {
-				target.value = target.value.replace(/[^а-яА-ЯЁё\-\ ]/, '');
-			} else if (target.type === 'email') {
-				target.value = target.value.replace(/[^a-zA-Z\@\_\-\.\!\~\*\']/, '');
-			} else if (target.type === 'tel') {
-				target.value = target.value.replace(/[^\d\(\)\-]/g, '');
-			}
-		});
-	};
-
-	checkFooterForm();
-
-
 	// 6 point task 23
 
-	    const validateInputs = () => {
-		const calcInputs = document.querySelectorAll('input.calc-item'),
-		    formName = document.querySelectorAll('[name=user_name]'),
-		    formMessage = document.querySelectorAll('[name=user_message]'),
-		    formEmail = document.querySelectorAll('[name=user_email]'),
-		    formPhone = document.querySelectorAll('[name=user_phone]');
+	const validateInputs = () => {
+			const calcInputs = document.querySelectorAll('input.calc-item'),
+				formName = document.querySelectorAll('[name=user_name]'),
+				formMessage = document.querySelectorAll('[name=user_message]'),
+				formEmail = document.querySelectorAll('[name=user_email]'),
+				formPhone = document.querySelectorAll('[name=user_phone]');
 
-		let error = new Set();
+			let error = new Set();
 
-		const validateNumberInputs = () => {
-		    calcInputs.forEach(el => {
-			el.value = el.value.replace(/[^\d]/g, '');
-		    })
-		};
+			const validateNumberInputs = () => {
+				calcInputs.forEach(el => {
+					el.value = el.value.replace(/[^\d]/g, '');
+				})
+			};
 
-		const validateLetterInputs = (input) => {
-		    input.value = input.value.replace(/[^а-яё0-9\.\,\:\-\!\? ]/gi, '');
-		};
+			const validateLetterInputs = (input) => {
+				input.value = input.value.replace(/[^а-яё0-9\.\,\:\-\!\? ]/gi, '');
+			};
 
-		const inputsHandler = (e) => {
-		    if (e.target.matches('.calc-item')) {
-			validateNumberInputs();
-		    }
-		    if (e.target.matches('[name=user_name]')) {
-			e.target.value = e.target.value.replace(/[^а-яё\-\ ]/gi, '');
-		    }
-		    if (e.target.matches('#form2-message')) {
-			validateLetterInputs(e.target);
-		    }
-		    if (e.target.matches('[name=user_email]')) {
-			e.target.value = e.target.value.replace(/[^a-z\@\_\-\.\!\~\*\']/gi, '');
-		    }
-		    if (e.target.matches('[name=user_phone]')) {
-			e.target.value = e.target.value.replace(/[^\d\(\)\-\+]/g, '');
-		    }
+			const inputsHandler = (e) => {
+				if (e.target.matches('.calc-item')) {
+					validateNumberInputs();
+				}
+				if (e.target.matches('[name=user_name]')) {
+					e.target.value = e.target.value.replace(/[^а-яё\-\ ]/gi, '');
+				}
+				if (e.target.matches('#form2-message')) {
+					validateLetterInputs(e.target);
+				}
+				if (e.target.matches('[name=user_email]')) {
+					e.target.value = e.target.value.replace(/[^a-z0-9\@\_\-\.\!\~\*\']/gi, '');
+				}
+				if (e.target.matches('[name=user_phone]')) {
+					e.target.value = e.target.value.replace(/[^\d\(\)\-\+]/g, '');
+				}
+			}
+
+			const trim = (input) => {
+				input.value = input.value.replace(/\s+/g, ' ');
+				input.value = input.value.replace(/\-+/g, '-');
+
+				let inputToExp = new RegExp("ReGeX" + input.value + "ReGeX");
+				if (/^[/ /-]/.test(inputToExp)) {
+					input.value = input.value.replace(/^[/ /-]/, '')
+				}
+				if (/[/ /-]$/.test(inputToExp)) {
+					input.value = input.value.replace(/[/ /-]$/, '')
+				}
+			}
+
+			const capitalize = (input) => {
+				let inputValue = input.value
+				return inputValue.split(' ').map(item =>
+					item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()).join(' ');
+			}
+
+			const controlInputs = (input, exp, message = 'Введите корректные данные') => {
+				if (!input.value.match(exp)) {
+					error.add(input.value)
+					input.value = '';
+				} 
+			}
+
+			formName.forEach(el => {
+				el.addEventListener('blur', () => {
+					trim(el);
+					el.value = capitalize(el);
+					controlInputs(el, /[а-яё]{2,}/gi);
+				})
+			})
+
+			formMessage.forEach(el => {
+				el.addEventListener('blur', () => {
+					trim(el);
+					el.value = capitalize(el);
+					controlInputs(el, /[а-яё]{2,}/gi);
+				})
+			})
+
+			formEmail.forEach(el => {
+				el.addEventListener('blur', () => {
+					controlInputs(el, /\w+@\w+\.\w{2,3}/g);
+					trim(el);
+				})
+			})
+
+			formPhone.forEach(el => {
+				el.addEventListener('blur', () => {
+					trim(el);
+					controlInputs(el, /\+?([-()]*\d){7,10}/g);
+				})
+			})
+
+			window.addEventListener('input', inputsHandler);
 		}
-
-		const trim = (input) => {
-		    input.value = input.value.replace(/\s+/g, ' ');
-		    input.value = input.value.replace(/\-+/g, '-');
-
-		    let inputToExp = new RegExp("ReGeX" + input.value + "ReGeX");
-		    if (/^[/ /-]/.test(inputToExp)) {
-			input.value = input.value.replace(/^[/ /-]/, '')
-		    }
-		    if (/[/ /-]$/.test(inputToExp)) {
-			input.value = input.value.replace(/[/ /-]$/, '')
-		    }
-		}
-
-		const capitalize = (input) => {
-		    let inputValue = input.value
-		    return inputValue.split(' ').map(item =>
-			item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()).join(' ');
-		}
-
-		const controlInputs = (input, exp, message = 'Введите корректные данные') => {
-		    if (!input.value.match(exp)) {
-			error.add(input.value)
-			input.value = '';
-		    } 
-		}
-
-		formName.forEach(el => {
-		    el.addEventListener('blur', () => {
-			trim(el);
-			el.value = capitalize(el);
-			controlInputs(el, /[а-яё]{2,}/gi);
-		    })
-		})
-
-		formMessage.forEach(el => {
-		    el.addEventListener('blur', () => {
-			controlInputs(el, /[^а-яё0-9\.\,\:\-\!\? ]/gi);
-			trim(el);
-		    })
-		})
-
-		formEmail.forEach(el => {
-		    el.addEventListener('blur', () => {
-			controlInputs(el, /\w+@\w+\.\w{2,3}/g);
-			trim(el);
-		    })
-		})
-
-		formPhone.forEach(el => {
-		    el.addEventListener('blur', () => {
-			trim(el);
-			controlInputs(el, /\+?[78]([-()]*\d){10}/g);
-		    })
-		})
-
-		window.addEventListener('input', inputsHandler);
-	    }
-	    validateInputs();
+		validateInputs();
 
 	//calculator
 	const calc = (price = 100) => {
@@ -457,6 +432,7 @@ toggleMenu();
 		const calcSquare = document.querySelector('.calc-square');
 		const calcCount = document.querySelector('.calc-count');
 		const totalValue = document.getElementById('total');
+		const calcInputs = document.querySelectorAll('input.calc-item');
 
 		const countSum = () => {
 			let total = 0;
@@ -484,13 +460,6 @@ toggleMenu();
 
 		};
 
-		calcBlock.addEventListener('change', (event) => {
-			const target = event.target;
-
-			if (target.matches('select') || target.matches('input')) {
-				countSum();
-			};
-		}); 
 
 		function animateValue(obj, start, end, duration) {
 			let startTimestamp = null;
@@ -503,13 +472,27 @@ toggleMenu();
 			  }
 			};
 			window.requestAnimationFrame(step);
-		  }
-		
-		  
+		}
 
+		calcBlock.addEventListener('change', (event) => {
+			const target = event.target;
+
+			if (target.matches('select') || target.matches('input')) {
+				countSum();
+			};
+			if (target.matches('select.calc-type')) {
+				if (calcType.value === '') {
+					calcInputs.forEach(el => {
+						el.value = '';
+					})
+				}
+			};
+		}); 
+
+		
 	}
 
-	calc(100);
+	calc();
 
 
 	//send-ajax-form
@@ -528,23 +511,6 @@ toggleMenu();
 					item.type !== 'button').forEach(item =>
 					item.value = '');
 		};
-
-		const isValid = (event) => {
-			const target = event.target;
-
-			if (target.matches('.form-phone')) {
-				target.value = target.value.replace(/[^\d\(\)\-]/g, '');
-			}
-			if (target.name === 'user_name') {
-				target.value = target.value.replace(/[^а-яё ]/gi, '');
-			}
-			if (target.name === 'user_email') {
-				target.value = target.value.replace(/[^a-z\@\_\-\.\!\~\*\']/gi, '');
-			}
-			if (target.matches('.mess')) {
-				target.value = target.value.replace(/[^а-яё ,.]/gi, '');
-			}
-		}
 
 
 		const postData = (body) => {
@@ -573,7 +539,6 @@ toggleMenu();
 				`;
 	
 				const formData = new FormData(form);
-				let body = {};
 				// for (const val of formData.entries()) {
 				// 	body[val[0]] = val[1];
 				// }			
@@ -609,7 +574,6 @@ toggleMenu();
 					})
 
 			});
-		form.addEventListener('input', isValid);
 	};
 
 		sendSomeForm('form1');
