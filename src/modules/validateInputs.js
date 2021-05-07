@@ -31,8 +31,11 @@ const validateInputs = () => {
 			e.target.value = e.target.value.replace(/[^a-z0-9\@\_\-\.\!\~\*\']/gi, '');
 		}
 		if (e.target.matches('[name=user_phone]')) {
-			e.target.value = e.target.value.replace(/[^\d\(\)\-\+]/g, '');
-		}
+            e.target.value = e.target.value.replace(/[^\d\(\)\-\+]/g, '');
+            if (e.target.value.length > 10) {
+                e.target.value = e.target.value.substring(0, 11)
+            }
+        }
 	}
 
 	const trim = (input) => {
