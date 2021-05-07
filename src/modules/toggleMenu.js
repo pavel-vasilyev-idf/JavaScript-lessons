@@ -14,6 +14,9 @@ const toggleMenu = () => {
 			displayMenu();
 		}
 	};
+	document.querySelector('menu').querySelector('a.close-btn').addEventListener('click', (e) => {
+			e.preventDefault();
+	});
 
 	document.body.addEventListener('click', handlerMenu);
 };

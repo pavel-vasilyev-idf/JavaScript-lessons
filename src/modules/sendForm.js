@@ -2,8 +2,8 @@ const sendForm = () => {
 	
   const errorMessage = 'Что-то пошло не так...';
   const loadMessage = 'Загрузка...';
-  const successMessage = 'Все успешно отпралвено';
-
+  const successMessage = 'Все успешно отправлено';
+  statusMessage.style.cssText = 'color: #fff; font-size: 24px;';
 
   const clearInput = (elem) => {
     const form = document.getElementById(elem);

@@ -81,6 +81,7 @@ const validateInputs = () => {
 	})
 
 	formEmail.forEach(el => {
+		el.required = true;
         el.addEventListener('blur', () => {
             el.value = el.value.replace(/\s/g, '');
             controlInputs(el, /\w+@\w+.\w{2,3}/g);
