@@ -81,11 +81,11 @@ const validateInputs = () => {
 	})
 
 	formEmail.forEach(el => {
-		el.addEventListener('blur', () => {
-			controlInputs(el, /\w+@\w+\.\w{2,3}/g);
-			trim(el);
-		})
-	})
+        el.addEventListener('blur', () => {
+            el.value = el.value.replace(/\s/g, '');
+            controlInputs(el, /\w+@\w+.\w{2,3}/g);
+        })
+    })
 
 	formPhone.forEach(el => {
 		el.addEventListener('blur', () => {
