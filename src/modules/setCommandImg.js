@@ -1,4 +1,3 @@
-//img
 const setCommandImg = () => {
 	const command = document.querySelector('#command .row');
 

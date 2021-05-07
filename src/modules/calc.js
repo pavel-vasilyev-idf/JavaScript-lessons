@@ -1,4 +1,3 @@
-//calculator
 const calc = (price = 100) => {
 	const calcBlock = document.querySelector('.calc-block');
 	const calcType = document.querySelector('.calc-type');
@@ -6,6 +5,7 @@ const calc = (price = 100) => {
 	const calcSquare = document.querySelector('.calc-square');
 	const calcCount = document.querySelector('.calc-count');
 	const totalValue = document.getElementById('total');
+	const calcInputs = document.querySelectorAll('input.calc-item');
 
 	const countSum = () => {
 		let total = 0;
@@ -33,26 +33,36 @@ const calc = (price = 100) => {
 
 	};
 
+
+	function animateValue(obj, start, end, duration) {
+		let startTimestamp = null;
+		const step = (timestamp) => {
+		  if (!startTimestamp) startTimestamp = timestamp;
+		  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+		  obj.innerHTML = Math.floor(progress * (end - start) + start);
+		  if (progress < 1) {
+			window.requestAnimationFrame(step);
+		  }
+		};
+		window.requestAnimationFrame(step);
+	}
+
 	calcBlock.addEventListener('change', (event) => {
 		const target = event.target;
 
 		if (target.matches('select') || target.matches('input')) {
 			countSum();
 		};
-	}); 
-
-	function animateValue(obj, start, end, duration) {
-		let startTimestamp = null;
-		const step = (timestamp) => {
-			if (!startTimestamp) startTimestamp = timestamp;
-			const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-			obj.innerHTML = Math.floor(progress * (end - start) + start);
-			if (progress < 1) {
-			window.requestAnimationFrame(step);
+		if (target.matches('select.calc-type')) {
+			if (calcType.value === '') {
+				calcInputs.forEach(el => {
+					el.value = '';
+				})
 			}
 		};
-		window.requestAnimationFrame(step);
-		}
+	}); 
+
+	
 }
 
 export default calc;

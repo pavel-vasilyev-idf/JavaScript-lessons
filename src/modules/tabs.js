@@ -1,5 +1,3 @@
-//tabs
-
 const tabs = () => {
 	const tabHeader = document.querySelector('.service-header');
 	const tab = tabHeader.querySelectorAll('.service-header-tab');

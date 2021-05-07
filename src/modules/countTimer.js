@@ -1,4 +1,3 @@
-	//timer
 function countTimer(dedline) {
 	const timerHours = document.querySelector('#timer-hours');
 	const timerMinutes = document.querySelector('#timer-minutes');
@@ -53,6 +52,7 @@ function countTimer(dedline) {
 			clearInterval(clear);
 		}
 	}
+	updateClock();
 	clear = setInterval(updateClock, 1000);
 	// console.log('clear: ', clear);
 }
